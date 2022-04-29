@@ -12,7 +12,7 @@ def get_input_for_day(day):
     response.raise_for_status
     input_data = []
     for line in response.iter_lines():
-        input_data.append(int(line))
+        input_data.append(line)
     return input_data
 
 

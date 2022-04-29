@@ -25,6 +25,6 @@ def part_two(input_data):
 
 
 if __name__ == "__main__":
-    input_data = get_input_for_day(1)
+    input_data = [int(x) for x in get_input_for_day(1)]
     part_one(input_data)
     part_two(input_data)

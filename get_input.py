@@ -18,4 +18,3 @@ def get_input_for_day(day):
 
 if __name__ == "__main__":
     print(get_input_for_day(1))
-

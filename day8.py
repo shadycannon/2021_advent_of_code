@@ -1,5 +1,6 @@
 #! /usr/bin/python
 
+from typing import List, Tuple, Dict
 from get_input import get_input_for_day
 from collections import Counter
 
@@ -16,7 +17,7 @@ EIGHT = 'abcdefg'
 NINE = 'abcdfg'
 
 
-def parse_input(input_data):
+def parse_input(input_data: List[str]) -> Tuple[List[str], List[str]]:
     signal_patterns = []
     output_values = []
     for line in input_data:
@@ -25,7 +26,7 @@ def parse_input(input_data):
     return signal_patterns, output_values
 
 
-def part_one(output_values):
+def part_one(output_values: List[str]) -> int:
     digit_count = 0
     for value in output_values:
         if len(value) == len(ONE) or len(value) == len(FOUR) or len(value) == len(SEVEN) or len(value) == len(EIGHT):
@@ -33,20 +34,19 @@ def part_one(output_values):
     return digit_count
 
 
-
-def get_count_of_all_letters(signal_pattern):
+def get_count_of_all_letters(signal_pattern: List[str]) -> Dict[str, int]:
     all_letters = ''.join(signal_pattern)
     letter_counts = Counter(all_letters)
     return letter_counts
 
 
-def find_a_value(one_pattern, seven_pattern):
+def find_a_value(one_pattern: str, seven_pattern: str) -> str:
     a_value = seven_pattern.replace(one_pattern[0], '').replace(one_pattern[1], '')
     return a_value
 
 
-def find_bef_values(letter_counts):
-    for letter,count in letter_counts.items():
+def find_bef_values(letter_counts: Dict[str, int]) -> Tuple[str, str, str]:
+    for letter, count in letter_counts.items():
         if count == 4:
             e_value = letter
         if count == 6:
@@ -56,22 +56,22 @@ def find_bef_values(letter_counts):
     return b_value, e_value, f_value
 
 
-def find_c_value(one_pattern, f_value):
+def find_c_value(one_pattern: str, f_value: str) -> str:
     return one_pattern.replace(f_value, '')
 
 
-def find_d_value(four_pattern, b_value, c_value, f_value):
+def find_d_value(four_pattern: str, b_value: str, c_value: str, f_value: str) -> str:
     return four_pattern.replace(b_value, '').replace(c_value, '').replace(f_value, '')
 
 
-def find_g_value(eight_pattern, all_values):
+def find_g_value(eight_pattern: str, all_values: List[str]) -> str:
     for letter in eight_pattern:
         if letter in all_values:
             continue
         return letter
 
 
-def translate_letters(all_values, output_values):
+def translate_letters(all_values:  List[str], output_values: List[str]) -> List[str]:
     translation_map = {}
     translation_list = ['a', 'b', 'c', 'd', 'e', 'f', 'g']
     for index in range(0, len(all_values)):
@@ -85,7 +85,7 @@ def translate_letters(all_values, output_values):
     return translated_output_values
 
 
-def get_number_from_values(translated_values):
+def get_number_from_values(translated_values: List[str]) -> int:
     values = [ZERO, ONE, TWO, THREE, FOUR, FIVE, SIX, SEVEN, EIGHT, NINE]
     output_value_sum = ''
     for value in translated_values:
@@ -93,7 +93,7 @@ def get_number_from_values(translated_values):
     return int(output_value_sum)
 
 
-def part_two(input_data):
+def part_two(input_data: List[str]) -> int:
     total_sum = 0
     for line in input_data:
         signal_pattern = sorted(line.split('|')[0][:-1].split(' '), key=len)

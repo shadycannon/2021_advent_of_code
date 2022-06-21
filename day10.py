@@ -1,7 +1,7 @@
 #! /usr/bin/python
 
+from typing import List
 from get_input import get_input_for_day
-from collections import defaultdict,Counter
 from statistics import median
 
 
@@ -9,7 +9,7 @@ LEFT_CHARACTERS = ['[', '(', '{', '<']
 RIGHT_CHARACTERS = [']', ')', '}', '>']
 
 
-def is_matching(char1, char2):
+def is_matching(char1: str, char2: str) -> bool:
     for index in range(len(LEFT_CHARACTERS)):
         if char1 == LEFT_CHARACTERS[index] and char2 == RIGHT_CHARACTERS[index]:
             return True
@@ -19,7 +19,7 @@ def is_matching(char1, char2):
     return False
 
 
-def get_illegal_character(syntax_line):
+def get_illegal_character(syntax_line: str) -> str:
     stack = []
     for character in syntax_line:
         if stack:
@@ -31,7 +31,7 @@ def get_illegal_character(syntax_line):
         stack.append(character)
 
 
-def get_incomplete_characters(syntax_line):
+def get_incomplete_characters(syntax_line: str) -> List[str]:
     stack = []
     for character in syntax_line:
         if stack:
@@ -43,7 +43,8 @@ def get_incomplete_characters(syntax_line):
         stack.append(character)
     return stack
 
-def score_illegal_character(character):
+
+def score_illegal_character(character: str) -> int:
     scoring_map = {
         ')': 3,
         ']': 57,
@@ -53,7 +54,7 @@ def score_illegal_character(character):
     return scoring_map[character]
 
 
-def part_one(input_data):
+def part_one(input_data: List[str]) -> int:
     score = 0
     for line in input_data:
         illegal_character = get_illegal_character(line)
@@ -62,7 +63,7 @@ def part_one(input_data):
     return score
 
 
-def complete_characters(incomplete_characters):
+def complete_characters(incomplete_characters: List[str]) -> List[str]:
     matching_map = {
         '[': ']',
         '(': ')',
@@ -75,7 +76,7 @@ def complete_characters(incomplete_characters):
     return matching_characters
 
 
-def score_complete_characters(complete_characters):
+def score_complete_characters(complete_characters: List[str]) -> int:
     scoring_map = {
         ')': 1,
         ']': 2,
@@ -89,7 +90,7 @@ def score_complete_characters(complete_characters):
     return score
 
 
-def part_two(input_data):
+def part_two(input_data: List[str]) -> int:
     all_scores = []
     for line in input_data:
         incomplete_characters = get_incomplete_characters(line)
@@ -100,7 +101,7 @@ def part_two(input_data):
 
 
 if __name__ == "__main__":
-    input_data = [
+    test_data = [
         "[({(<(())[]>[[{[]{<()<>>",
         "[(()[<>])]({[<{<<[]>>(",
         "{([(<{}[<>[]}>{[]{[(<()>",

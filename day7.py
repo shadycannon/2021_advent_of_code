@@ -1,15 +1,15 @@
 #! /usr/bin/python
-
+import sys
+from typing import List
 from get_input import get_input_for_day
-import math
-from collections import Counter
 
 DAYS = 256
 REPRODUCTION_TIME = 7
 
-def part_one(input_data):
+
+def part_one(input_data: List[str]) -> int:
     crabs = sorted([int(x) for x in input_data[0].split(',')])
-    min_fuel_used = 10000000000
+    min_fuel_used = sys.maxsize
     for horiz_position in range(crabs[0], crabs[-1] + 1):
         fuel_used = 0
         for crab in crabs:
@@ -20,13 +20,12 @@ def part_one(input_data):
     return min_fuel_used
 
 
-def calculate_fuel_usage(movement):
-    fuel = 0
+def calculate_fuel_usage(movement: int) -> int:
     fuel = int(((1 + movement) * movement) / 2)
     return fuel
 
 
-def part_two(input_data):
+def part_two(input_data: List[str]) -> int:
     crabs = sorted([int(x) for x in input_data[0].split(',')])
     min_fuel_used = None
     for horiz_position in range(crabs[0], crabs[-1] + 1):
@@ -40,7 +39,7 @@ def part_two(input_data):
 
 
 if __name__ == "__main__":
-    input_data = ["16,1,2,0,4,2,7,1,2,14"]
+    test_data = ["16,1,2,0,4,2,7,1,2,14"]
     input_data = [x.decode() for x in get_input_for_day(7)]
     print(calculate_fuel_usage(4))
     part_one_answer = part_one(input_data)

@@ -1,14 +1,12 @@
 #! /usr/bin/python
 
+from typing import List, Tuple
 from get_input import get_input_for_day
-from itertools import permutations
-
-from collections import defaultdict,Counter
-from statistics import median
+Coord = Tuple[int, int]
 
 
 class SquidSimulation:
-    def __init__(self, input_data, steps):
+    def __init__(self, input_data: List[str], steps: int) -> None:
         self.current = (0, 0)
         self.steps = steps
         self.num_flashes = 0
@@ -17,13 +15,13 @@ class SquidSimulation:
             squids.append([int(x) for x in input_data[y]])
         self.squids = squids
 
-    def squid_gen(self):
+    def squid_gen(self) -> Tuple[int, int]:
         squids = self.squids
         for y in range(0, len(squids)):
             for x in range(0, len(squids[y])):
                 yield x, y
 
-    def print_squids(self, desired_output=[]):
+    def print_squids(self, desired_output: List[List] = []) -> None:
         squids = self.squids
         print('-' * (len(squids[0]) * 2 - 1))
         for y in range(0, len(squids)):
@@ -38,7 +36,7 @@ class SquidSimulation:
 
         print('-' * (len(squids[0]) * 2 - 1))
 
-    def flash_tens(self):
+    def flash_tens(self) -> bool:
         all_xs = True
         squids = self.squids
         for (x, y) in self.squid_gen():
@@ -48,13 +46,13 @@ class SquidSimulation:
                 all_xs = False
         return all_xs
 
-    def increase_energy(self):
+    def increase_energy(self) -> None:
         squids = self.squids
         for y in range(0, len(squids)):
             for x in range(0, len(squids[y])):
                 squids[y][x] += 1
 
-    def determine_adj_squids(self, squid):
+    def determine_adj_squids(self, squid: Coord) -> List[Coord]:
         squids = self.squids
         adj_squids = []
         squid_x = squid[0]
@@ -70,7 +68,7 @@ class SquidSimulation:
 
         return adj_squids
 
-    def flash_explosion(self, flashed_squid, adj_squids):
+    def flash_explosion(self, flashed_squid: Coord, adj_squids: List[Coord]) -> None:
         squids = self.squids
         squids[flashed_squid[1]][flashed_squid[0]] = 'x'
         self.num_flashes += 1
@@ -80,7 +78,7 @@ class SquidSimulation:
                 if squids[y][x] >= 10:
                     self.flash_explosion((x, y), self.determine_adj_squids((x, y)))
 
-    def part_one(self):
+    def part_one(self) -> None:
         squids = self.squids
         for step in range(0, self.steps):
             self.increase_energy()
@@ -90,8 +88,7 @@ class SquidSimulation:
                     self.flash_explosion((x, y), adj_squids)
             self.flash_tens()
 
-
-    def part_two(self):
+    def part_two(self) -> int:
         squids = self.squids
         for step in range(0, self.steps):
             self.increase_energy()
@@ -101,13 +98,11 @@ class SquidSimulation:
                     self.flash_explosion((x, y), adj_squids)
             all_flashed = self.flash_tens()
             if all_flashed:
-                print("sdfklh")
                 return step + 1
-            self.print_squids()
 
 
 if __name__ == "__main__":
-    input_data = [
+    test_data = [
         '5483143223',
         '2745854711',
         '5264556173',
@@ -123,10 +118,7 @@ if __name__ == "__main__":
 
     s = SquidSimulation(input_data, 1000)
 
-    #print(s.part_one())
-    #print(s.num_flashes)
+    s.part_one()
+    print(s.num_flashes)
     print(s.part_two())
-    #part_one_answer = part_one(input_data)
-    #part_two_answer = part_two(input_data)
-    #print(f'part_one_answer: {part_one_answer}')
-    #print(f'part_two_answer: {part_two_answer}')
+

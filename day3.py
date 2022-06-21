@@ -1,10 +1,11 @@
 #! /usr/bin/python
 
+from typing import List
 from get_input import get_input_for_day
-from collections import Counter,defaultdict
+from collections import Counter, defaultdict
 
 
-def part_one(input_data):
+def part_one(input_data: List[str]) -> int:
     columns = defaultdict(str)
     for row in input_data:
         for i in range(0, len(row)):
@@ -19,7 +20,7 @@ def part_one(input_data):
     return gamma_number_dec * epsilon_number_dec
 
 
-def part_two(input_data):
+def part_two(input_data: List[str]) -> int:
     columns = defaultdict(str)
     for row in input_data:
         for i in range(0, len(row)):
@@ -66,7 +67,7 @@ def part_two(input_data):
 
 
 if __name__ == "__main__":
-    input_data = [
+    test_data = [
         "00100",
         "11110",
         "10110",

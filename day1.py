@@ -1,10 +1,12 @@
-#! /usr/bin/python
+#! /usr/bin/python3
 
+import sys
+from typing import List
 from get_input import get_input_for_day
 
 
-def part_one(input_data):
-    previous_distance = 10000000
+def part_one(input_data: List[int]) -> int:
+    previous_distance = sys.maxsize
     larger_distance_count = 0
     for distance in input_data:
         if distance > previous_distance:
@@ -13,7 +15,7 @@ def part_one(input_data):
     return larger_distance_count
 
 
-def part_two(input_data):
+def part_two(input_data: List[int]) -> int:
     larger_sum_count = 0
     previous_sum = input_data[0] + input_data[1] + input_data[2]
     for i in range(3, len(input_data)):

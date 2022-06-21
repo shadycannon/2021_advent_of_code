@@ -1,10 +1,13 @@
 #! /usr/bin/python
 
+from typing import Dict, List, Tuple
 from get_input import get_input_for_day
 from collections import defaultdict
 
+Coord = Tuple[int, int]
 
-def process_coords_diags(coord):
+
+def process_coords_diags(coord: str) -> List[Coord]:
     point1 = coord.split('->')[0].strip()
     point2 = coord.split('->')[1].strip()
     point1_x = int(point1.split(',')[0])
@@ -37,7 +40,7 @@ def process_coords_diags(coord):
     return coords
 
 
-def process_coords(coord):
+def process_coords(coord: str) -> List[Coord]:
     point1 = coord.split('->')[0].strip()
     point2 = coord.split('->')[1].strip()
     point1_x = int(point1.split(',')[0])
@@ -57,7 +60,7 @@ def process_coords(coord):
     return coords
 
 
-def update_sea_floor_map(coords, sea_floor_map, overlap_points):
+def update_sea_floor_map(coords: List[Coord], sea_floor_map: Dict[int], overlap_points: int) -> int:
     for coord in coords:
         row = sea_floor_map[coord[1]]
         value = row.get(coord[0], 0)
@@ -68,7 +71,7 @@ def update_sea_floor_map(coords, sea_floor_map, overlap_points):
     return overlap_points
 
 
-def print_sea_floor_map(sea_floor_map):
+def print_sea_floor_map(sea_floor_map: Dict[int]) -> None:
     for x in range(0, 10):
         row = ''
         for y in range(0,10):
@@ -76,7 +79,7 @@ def print_sea_floor_map(sea_floor_map):
         print(row)
 
 
-def part_one(input_data):
+def part_one(input_data: List[str]) -> int:
     sea_floor_map = defaultdict(dict)
     overlap_points = 0
     for coord in input_data:
@@ -85,7 +88,7 @@ def part_one(input_data):
     return overlap_points
 
 
-def part_two(input_data):
+def part_two(input_data: List[str]) -> int:
     sea_floor_map = defaultdict(dict)
     overlap_points = 0
     for coord in input_data:
@@ -95,7 +98,7 @@ def part_two(input_data):
 
 
 if __name__ == "__main__":
-    input_data = [
+    test_data = [
         "0,9 -> 5,9",
         "8,0 -> 0,8",
         "9,4 -> 3,4",

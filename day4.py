@@ -1,10 +1,11 @@
 #! /usr/bin/python
 
+from typing import List, Tuple, Dict
 from get_input import get_input_for_day
 from collections import defaultdict
 
 
-def check_for_bingo(board):
+def check_for_bingo(board: List[str]) -> bool:
     columns = defaultdict(list)
     for row in board:
         if ''.join(row) == 'x'*len(row):
@@ -19,14 +20,14 @@ def check_for_bingo(board):
     return False
 
 
-def mark_board(number, board):
+def mark_board(number: str, board: List[str]) -> None:
     for row in board:
         for value in row:
             if number == value:
                 row[row.index(number)] = 'x'
 
 
-def get_score(number, board):
+def get_score(number: str, board: List[str]) -> int:
     sum = 0
     for row in board:
         for value in row:
@@ -35,7 +36,7 @@ def get_score(number, board):
     return sum * int(number)
 
 
-def part_one(numbers_called, boards):
+def part_one(numbers_called: List[str], boards: Dict[List]) -> int:
     for number in numbers_called:
         for board in boards.values():
             mark_board(number, board)
@@ -43,7 +44,7 @@ def part_one(numbers_called, boards):
                 return get_score(number, board)
 
 
-def part_two(numbers_called, boards_dict):
+def part_two(numbers_called: List[str], boards_dict: Dict[List]) -> int:
     boards = boards_dict.values()
     losing_boards = boards
     for number in numbers_called:
@@ -57,7 +58,7 @@ def part_two(numbers_called, boards_dict):
         losing_boards = new_losing_boards
 
 
-def process_input(input_data):
+def process_input(input_data: List[str]) -> Tuple[List[str], Dict[List]]:
     numbers_called = input_data[0].split(',')
     boards = defaultdict(list)
     board_count = -1
@@ -67,11 +68,11 @@ def process_input(input_data):
             continue
         row_list = row.split(' ')
         boards[board_count].append([x for x in row_list if x])
-    return(numbers_called, boards)
+    return numbers_called, boards
 
 
 if __name__ == "__main__":
-    input_data = [
+    test_data = [
         "00100",
         "11110",
         "10110",

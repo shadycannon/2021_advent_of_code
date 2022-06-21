@@ -1,13 +1,17 @@
 #!/usr/bin/python3
 
-from get_input import get_input_for_day
 import sys
-
 from collections import defaultdict, OrderedDict
+from typing import List, Tuple
+
+from get_input import get_input_for_day
+
+
+Coord = Tuple[int, int]
 
 
 class CaveTraverse:
-    def __init__(self, input_data: list):
+    def __init__(self, input_data: List[str]) -> None:
         self.lowest_total_risk = None
         chiton_grid = []
         for y in range(0, len(input_data)):
@@ -31,7 +35,7 @@ class CaveTraverse:
     def get_hueristic_value(self, coord: tuple) -> int:
         return abs(self.max_x - coord[0]) + abs(self.max_y - coord[1]) + self.get_risk_value(coord) * 2
 
-    def find_next_steps(self, starting_coord: tuple, previous_steps: list) -> list:
+    def find_next_steps(self, starting_coord: Coord, previous_steps: List[Coord]) -> List[Coord]:
         new_coords_info = defaultdict(int)
         (x, y) = starting_coord
 
@@ -52,7 +56,7 @@ class CaveTraverse:
         ordered_coords = OrderedDict(sorted(new_coords_info.items(), key=lambda t: t[1]))
         return list(ordered_coords.keys())
 
-    def find_neighbors(self, starting_coord: list, unvisited_node: list) -> list:
+    def find_neighbors(self, starting_coord: Coord, unvisited_node: Coord) -> List[Coord]:
         new_coords_info = defaultdict(int)
         (x, y) = starting_coord
 
@@ -74,10 +78,10 @@ class CaveTraverse:
 
         return list(ordered_coords.keys())
 
-    def get_risk_value(self, coord: tuple) -> int:
+    def get_risk_value(self, coord: Coord) -> int:
         return self.chiton_grid[coord[1]][coord[0]]
 
-    def find_all_paths(self, starting_point: tuple = (0, 0), previous_steps: list = [], total_risk: int = 0) -> None:
+    def find_all_paths(self, starting_point: Coord = (0, 0), previous_steps: List[Coord] = [], total_risk: int = 0) -> None:
         new_previous_steps = previous_steps[:]
         new_previous_steps.append(starting_point)
         if total_risk > self.lowest_total_risk:
@@ -90,14 +94,14 @@ class CaveTraverse:
             risk = self.get_risk_value(step)
             self.find_all_paths(step, new_previous_steps, total_risk + risk)
 
-    def print_grid(self, chiton_grid: list = None):
+    def print_grid(self, chiton_grid: List[list] = None) -> None:
         if not chiton_grid:
             chiton_grid = self.chiton_grid
         for y in range(0, len(chiton_grid)):
             row = chiton_grid[y]
             print(''.join([str(x) for x in row]))
 
-    def dijkstra_algorithm(self):
+    def dijkstra_algorithm(self) -> None:
         max_value = sys.maxsize
         start_node = (0, 0)
         shortest_path = {}
@@ -139,13 +143,13 @@ class CaveTraverse:
         self.find_all_paths()
         return self.lowest_total_risk
 
-    def get_new_value(self, value, distance):
+    def get_new_value(self, value: int, distance: int):
         new_value = value + distance
         if new_value > 9:
             new_value = new_value % 10 + 1
         return new_value
 
-    def expand_map(self) -> list:
+    def expand_map(self) -> List[list]:
         expansion_factor = 5
         chiton_grid = self.chiton_grid
 

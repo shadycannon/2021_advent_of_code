@@ -1,115 +1,11 @@
 #! /usr/bin/python
 
+from typing import List, Tuple
 from get_input import get_input_for_day
-from itertools import permutations
-
-from collections import defaultdict,Counter
-from statistics import median
-
-class PaperFolderWithGrid:
-    def __init__(self, input_data):
-        folding = False
-        self.folding_instructions = []
-        coords = []
-        max_x = 0
-        max_y = 0
-        for line in input_data:
-            if not line.strip():
-                folding = True
-                continue
-            if folding:
-                self.folding_instructions.append(line.split(' ')[2].split('='))
-            else:
-                x,y = line.split(',')
-                x= int(x)
-                y = int(y)
-                coords.append((x,y))
-
-                max_x = max(max_x, x)
-                max_y = max(max_y, y)
-
-
-        self.grid = []
-        for y in range(0, max_y + 1):
-            self.grid.append([])
-            for x in range(0, max_x + 1):
-                if (x,y) in coords:
-                    self.grid[y].append('#')
-                else:
-                    self.grid[y].append('.')
-
-
-    def gen_grid_loop(self, grid=None):
-        if not grid:
-            grid = self.grid
-        for y in range(0, len(grid)):
-            for x in range(0, len(grid[0])):
-                yield x,y
-
-
-    def print_grid(self, grid=None):
-        if not grid:
-            grid = self.grid
-        row = ''
-        for x,y in self.gen_grid_loop(grid):
-            row += grid[y][x]
-            if len(row) == len(grid[0]):
-                print(row)
-                row = ''
-
-    def split_grids(self, line):
-        grid1 = []
-        grid2 = []
-        value = int(line[1])
-        if line[0] == 'x':
-            for y in range(0, len(self.grid)):
-                first_half = self.grid[y][:value]
-                second_half = self.grid[y][value+1:]
-                second_half.reverse()
-                grid1.append(first_half)
-                grid2.append(second_half)
-
-        else:
-            grid1 = self.grid[:value]
-            grid2 = self.grid[:value+1]
-            grid2.reverse()
-
-        return grid1, grid2
-
-    def overlap_grids(self, grid1, grid2):
-        grid1_area = len(grid1) * len(grid1[0])
-        grid2_area = len(grid2) * len( )
-
-        for x,y in self.gen_grid_loop(grid1):
-            if grid2[y][x] == '#':
-                grid1[y][x] = '#'
-
-        return grid1
-
-
-    def count_dots(self):
-        c = Counter([x for y in self.grid for x in y])
-        return c['#']
-
-    def part_one_with_grid(self):
-        folding_instruction = self.folding_instructions[1]
-        grid1, grid2 = self.split_grids(folding_instruction)
-        print('grid1')
-
-        self.print_grid(grid1)
-        print('grid2')
-
-        self.print_grid(grid2)
-        print('wtf')
-
-        #new_grid = self.overlap_grids(grid1, grid2)
-        #self.grid = new_grid
-        #return self.count_dots()
-
 
 
 class PaperFolder:
-    def __init__(self, input_data):
+    def __init__(self, input_data: List[str]) -> None:
         folding = False
         coords = []
         max_x = 0
@@ -136,7 +32,7 @@ class PaperFolder:
         self.max_x = max_x
         self.max_y = max_y
 
-    def split_grid(self, folding_instruction):
+    def split_grid(self, folding_instruction: List[str]) -> Tuple[List[list], List[list]]:
         grid1 = []
         grid2 = []
         axis = 0 if folding_instruction[0] == 'x' else 1
@@ -158,7 +54,7 @@ class PaperFolder:
 
         return grid1, grid2
 
-    def transform_smaller_grid(self, grid1, grid2, axis, value):
+    def transform_smaller_grid(self, grid1: List[list], grid2: List[list], axis: int, value: int) -> None:
         max_value = self.max_coords[axis]
         if value < max_value / 2:
             smaller_grid = grid1
@@ -170,14 +66,13 @@ class PaperFolder:
 
         self.max_coords[axis] = value - 1
 
-
-    def part_one(self):
+    def part_one(self) -> None:
         folding_instruction = self.folding_instructions[0]
         grid1, grid2 = self.split_grid(folding_instruction)
 
         self.coords = set(grid1 + grid2)
 
-    def print_grid(self):
+    def print_grid(self) -> None:
         for y in range(0, self.max_coords[1] + 1):
             row = ''
             for x in range(0, self.max_coords[0] + 1):
@@ -187,9 +82,7 @@ class PaperFolder:
                     row += '.'
             print(row)
 
-
-
-    def part_two(self):
+    def part_two(self) -> None:
         for instruction in self.folding_instructions:
 
             grid1, grid2 = self.split_grid(instruction)
@@ -198,7 +91,7 @@ class PaperFolder:
 
 
 if __name__ == "__main__":
-    input_data = [
+    test_data = [
         '6,10',
         '0,14',
         '9,10',
@@ -223,15 +116,9 @@ if __name__ == "__main__":
     ]
     input_data = [x.decode() for x in get_input_for_day(13)]
 
-
     pf = PaperFolder(input_data)
     print(pf.part_two())
     pf.print_grid()
-    #print(pf.part_one())
-    #print(pf.part_two())
-    #print(s.part_one())
-    #print(s.num_flashes)
-    #part_one_answer = part_one(input_data)
-    #part_two_answer = part_two(input_data)
-    #print(f'part_one_answer: {part_one_answer}')
-    #print(f'part_two_answer: {part_two_answer}')
+    print(pf.part_one())
+    pf.print_grid()
+
